@@ -157,7 +157,7 @@ function SectionHeader({ title, subtitle }: { title: string; subtitle: string })
   );
 }
 
-function Overview({ onJump }: { onJump: (t: Tab) => void }) {
+function Overview({ onJump, name, email }: { onJump: (t: Tab) => void; name: string; email: string }) {
   const stats = [
     { label: "Upcoming Events", value: events.length, icon: Calendar },
     { label: "Active Clubs", value: clubs.length, icon: Users },
@@ -166,7 +166,7 @@ function Overview({ onJump }: { onJump: (t: Tab) => void }) {
   ];
   return (
     <>
-      <SectionHeader title="Welcome back 👋" subtitle="Here's what's happening on campus today." />
+      <SectionHeader title={`Welcome back, ${name} 👋`} subtitle={email || "Here's what's happening on campus today."} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((s) => (
           <div key={s.label} className="rounded-2xl border border-border bg-card p-5 shadow-card">
