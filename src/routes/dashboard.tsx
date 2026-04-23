@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { Calendar, Users, Bell, Briefcase, LayoutDashboard, LogOut, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { events, clubs, notices, opportunities } from "@/lib/mock-data";
+import { useAuth } from "@/contexts/auth-context";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -30,6 +32,50 @@ const nav: { id: Tab; label: string; icon: typeof Calendar }[] = [
 
 function Dashboard() {
   const [tab, setTab] = useState<Tab>("overview");
+  const { user, loading, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState<{ name: string | null; email: string | null } | null>(null);
+
+  useEffect(() => {
+    if (!loading && !user) navigate({ to: "/auth" });
+  }, [user, loading, navigate]);
+
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("users")
+        .select("name, email")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (cancelled) return;
+      setProfile({
+        name: data?.name ?? (user.user_metadata?.name as string) ?? null,
+        email: data?.email ?? user.email ?? null,
+      });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate({ to: "/auth" });
+  };
+
+  if (loading || !user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background text-sm text-muted-foreground">
+        Loading...
+      </div>
+    );
+  }
+
+  const displayName = profile?.name ?? user.email?.split("@")[0] ?? "there";
+  const displayEmail = profile?.email ?? user.email ?? "";
+  const initial = (displayName?.[0] ?? "U").toUpperCase();
 
   return (
     <div className="min-h-screen bg-background">
@@ -53,8 +99,12 @@ function Dashboard() {
           ))}
         </nav>
         <div className="border-t border-border p-4">
-          <Button variant="ghost" asChild className="w-full justify-start">
-            <Link to="/"><LogOut className="mr-2 h-4 w-4" />Sign out</Link>
+          <div className="mb-3 rounded-lg border border-border bg-background p-3">
+            <div className="truncate text-sm font-medium">{displayName}</div>
+            <div className="truncate text-xs text-muted-foreground">{displayEmail}</div>
+          </div>
+          <Button variant="ghost" onClick={handleSignOut} className="w-full justify-start">
+            <LogOut className="mr-2 h-4 w-4" />Sign out
           </Button>
         </div>
       </aside>
@@ -68,7 +118,12 @@ function Dashboard() {
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <div className="hidden h-9 w-9 items-center justify-center rounded-full bg-gradient-hero font-display text-sm font-bold text-primary-foreground sm:flex">A</div>
+            <div className="hidden h-9 w-9 items-center justify-center rounded-full bg-gradient-hero font-display text-sm font-bold text-primary-foreground sm:flex">
+              {initial}
+            </div>
+            <Button variant="ghost" size="icon" onClick={handleSignOut} aria-label="Sign out" className="md:hidden">
+              <LogOut className="h-4 w-4" />
+            </Button>
           </div>
         </header>
 
@@ -82,7 +137,7 @@ function Dashboard() {
         </div>
 
         <main className="mx-auto max-w-7xl p-6">
-          {tab === "overview" && <Overview onJump={setTab} />}
+          {tab === "overview" && <Overview onJump={setTab} name={displayName} email={displayEmail} />}
           {tab === "events" && <EventsView />}
           {tab === "clubs" && <ClubsView />}
           {tab === "notices" && <NoticesView />}
