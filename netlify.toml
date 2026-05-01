@@ -1,0 +1,31 @@
+# Netlify configuration for this Vite + TanStack Router SPA.
+#
+# IMPORTANT: This project uses TanStack Start, which by default produces a
+# Cloudflare Worker (SSR) output via @lovable.dev/vite-tanstack-config.
+# Netlify static hosting cannot run that Worker. To deploy as a pure static
+# SPA on Netlify, the build must emit only client assets to `dist/`.
+#
+# If `npm run build` produces a `dist/` folder containing `index.html` and
+# client JS, this config is ready to deploy. If the build instead produces a
+# Worker bundle (no top-level index.html in dist/), you will need to switch
+# the Vite config off the Cloudflare/SSR adapter before Netlify can serve it.
+
+[build]
+  command = "npm install && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA fallback — required so that client-side routes like /auth and /dashboard
+# work on hard refresh and direct links. Mirrors public/_redirects.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Long-cache hashed assets emitted by Vite.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
