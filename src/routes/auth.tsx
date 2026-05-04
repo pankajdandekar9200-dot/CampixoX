@@ -91,8 +91,8 @@ function AuthPage() {
     }
 
     setBusy(false);
-    toast.success("Account created! Check your email to confirm if required.");
-    if (data.session) navigate({ to: "/dashboard" });
+    toast.success("Account created!");
+    navigate({ to: "/dashboard" });
   };
 
   return (
