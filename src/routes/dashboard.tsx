@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Calendar, Users, Bell, Briefcase, LayoutDashboard, LogOut, Search } from "lucide-react";
+import { Calendar, Users, Bell, Briefcase, LayoutDashboard, LogOut, Search, FileText, Lock, Download, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
 });
 
-type Tab = "overview" | "events" | "clubs" | "notices" | "opportunities";
+type Tab = "overview" | "events" | "clubs" | "notices" | "opportunities" | "notes";
 
 const nav: { id: Tab; label: string; icon: typeof Calendar }[] = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
@@ -28,6 +28,7 @@ const nav: { id: Tab; label: string; icon: typeof Calendar }[] = [
   { id: "clubs", label: "Clubs", icon: Users },
   { id: "notices", label: "Notices", icon: Bell },
   { id: "opportunities", label: "Opportunities", icon: Briefcase },
+  { id: "notes", label: "Notes", icon: FileText },
 ];
 
 function Dashboard() {
@@ -142,6 +143,7 @@ function Dashboard() {
           {tab === "clubs" && <ClubsView />}
           {tab === "notices" && <NoticesView />}
           {tab === "opportunities" && <OppView />}
+          {tab === "notes" && <NotesView />}
         </main>
       </div>
     </div>
