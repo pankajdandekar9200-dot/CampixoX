@@ -192,7 +192,16 @@ function Overview({ onJump, name, email }: { onJump: (t: Tab) => void; name: str
         </Card>
         <Card title="Featured Clubs" onMore={() => onJump("clubs")}>
           {clubs.slice(0, 3).map((c) => (
-            <Row key={c.id} title={c.name} meta={`${c.members} members · ${c.organizer}`} badge={c.tag} />
+            <div key={c.id} className="flex items-center gap-3 rounded-lg border border-border/60 bg-background p-3">
+              {c.logo ? (
+                <img src={c.logo} alt={`${c.name} logo`} className="h-10 w-10 rounded-md object-contain" />
+              ) : (
+                <div className="flex h-10 w-10 items-center justify-center rounded-md bg-gradient-hero font-display text-sm font-bold text-primary-foreground">
+                  {c.name[0]}
+                </div>
+              )}
+              <div className="truncate text-sm font-medium">{c.name}</div>
+            </div>
           ))}
         </Card>
         <Card title="Opportunities" onMore={() => onJump("opportunities")}>
@@ -258,14 +267,20 @@ function ClubsView() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {clubs.map((c) => (
           <div key={c.id} className="rounded-2xl border border-border bg-card p-6 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elegant">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-hero font-display text-xl font-bold text-primary-foreground shadow-elegant">
-              {c.name[0]}
-            </div>
+            {c.logo ? (
+              <img
+                src={c.logo}
+                alt={`${c.name} logo`}
+                style={{ width: 100 }}
+                className="h-auto object-contain"
+              />
+            ) : (
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-hero font-display text-xl font-bold text-primary-foreground shadow-elegant">
+                {c.name[0]}
+              </div>
+            )}
             <h3 className="mt-4 font-display text-lg font-semibold">{c.name}</h3>
-            <p className="text-xs text-muted-foreground">Lead by {c.organizer} · {c.members} members</p>
-            <p className="mt-3 text-sm">{c.description}</p>
-            <div className="mt-4 flex items-center justify-between">
-              <Badge variant="secondary">{c.tag}</Badge>
+            <div className="mt-4 flex items-center justify-end">
               <Button size="sm">Join Club</Button>
             </div>
           </div>
