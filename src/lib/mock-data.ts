@@ -1,15 +1,21 @@
-export const events = [
-  { id: 1, title: "TechFest 2026", date: "May 12, 2026", time: "10:00 AM", organizer: "CS Club", description: "Annual tech festival with workshops, hackathons, and keynote talks.", tag: "Festival" },
-  { id: 2, title: "AI Workshop", date: "Apr 28, 2026", time: "2:00 PM", organizer: "AI Society", description: "Hands-on intro to LLMs and modern ML pipelines.", tag: "Workshop" },
-  { id: 3, title: "Cultural Night", date: "May 5, 2026", time: "7:00 PM", organizer: "Arts Council", description: "An evening of performances, music and food stalls.", tag: "Culture" },
-  { id: 4, title: "Startup Pitch Day", date: "May 20, 2026", time: "11:00 AM", organizer: "E-Cell", description: "Pitch your idea to investors and win seed funding.", tag: "Business" },
-];
+export const events: Array<{
+  id: number;
+  title: string;
+  date: string;
+  time: string;
+  organizer: string;
+  description: string;
+  tag: string;
+}> = [];
 
-export const clubs = [
-  { id: 1, name: "Coding Club", organizer: "Aarav Mehta", members: 248, description: "Weekly coding contests, open-source contributions, and tech talks.", tag: "Tech" },
-  { id: 2, name: "Photography Society", organizer: "Maya Singh", members: 132, description: "Capture campus life — workshops, walks, and exhibitions.", tag: "Arts" },
-  { id: 3, name: "Debate Club", organizer: "Rohan Iyer", members: 89, description: "Sharpen your rhetoric in weekly parliamentary debates.", tag: "Academic" },
-  { id: 4, name: "Music Society", organizer: "Ananya Roy", members: 174, description: "Bands, jam sessions, and the annual battle of bands.", tag: "Arts" },
+export const clubs: Array<{
+  id: number;
+  name: string;
+  logo?: string;
+}> = [
+  { id: 1, name: "Zion DIT", logo: "/images/zion-logo.png" },
+  { id: 2, name: "ACUNETIX 13.0" },
+  { id: 3, name: "Team Durgayans Racing" },
 ];
 
 export const notices = [
