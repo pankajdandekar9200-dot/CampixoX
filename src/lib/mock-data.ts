@@ -19,7 +19,7 @@ export const clubs: Array<{
 ];
 
 export const notices = [
-  { id: 1, title: "", category: "Exam", date: "END SEMISTER EXAM START FROM 9 MAY(PRELIMS)", 2026", urgent: true },
+  { id: 1, title: "", category: "Exam", date: "END SEMISTER EXAM START FROM 9 MAY(PRELIMS), 2026", urgent: true },
   { id: 2, title: "NEW CENTRAL DIT Library hours extended until 11 PM", category: "General", date: "MAY, 2026", urgent: false },
   { id: 3, title: "Holiday on MAY 9 BECUASE SUNDAY HAHA ", category: "Holiday", date: "Apr 18, 2026", urgent: false },
   { id: 4, title: "Hostel maintenance — block C unavailable Apr 25", category: "Urgent", date: "Apr 17, 2026", urgent: true },
