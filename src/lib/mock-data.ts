@@ -26,8 +26,7 @@ export const notices = [
 ];
 
 export const opportunities = [
-  { id: 1, title: "Summer Intern — Frontend Engineer", company: "CampixoX", location: "Remote", type: "Internship", deadline: "May 1, 2026" },
-  { id: 2, title: "National Coding Championship", company: "GOOGLE", location: "Online", type: "Competition", deadline: "May 15, 2026" },
-  { id: 3, title: "Product Design Fellowship", company: "PRANJAL PVT.LMT", location: "Bangalore", type: "Fellowship", deadline: "Jun 10, 2026" },
-  { id: 4, title: "Research Assistant — NLP Lab", company: "IIT Delhi", location: "On-campus", type: "Research", deadline: "May 5, 2026" },
+  { id: 1, title: "PRANJAL PVT. LMT", company: "PRANJAL PVT. LMT", location: "India", type: "Job", deadline: "Open" },
+  { id: 2, title: "Gen AI Engineering Opportunity", company: "GOOGLE", location: "Online / Global", type: "Internship / Job", deadline: "Open" },
+  { id: 3, title: "Security Opportunity", company: "Dr. D. Y. Patil Institute of Technology", location: "Pune", type: "Internship", deadline: "Open" },
 ];
