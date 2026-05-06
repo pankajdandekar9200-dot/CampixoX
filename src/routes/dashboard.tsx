@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Calendar, Users, Bell, Briefcase, LayoutDashboard, LogOut, Search } from "lucide-react";
+import { Calendar, Users, Bell, Briefcase, LayoutDashboard, LogOut, Search, FileText, Lock, Download, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
 });
 
-type Tab = "overview" | "events" | "clubs" | "notices" | "opportunities";
+type Tab = "overview" | "events" | "clubs" | "notices" | "opportunities" | "notes";
 
 const nav: { id: Tab; label: string; icon: typeof Calendar }[] = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
@@ -28,6 +28,7 @@ const nav: { id: Tab; label: string; icon: typeof Calendar }[] = [
   { id: "clubs", label: "Clubs", icon: Users },
   { id: "notices", label: "Notices", icon: Bell },
   { id: "opportunities", label: "Opportunities", icon: Briefcase },
+  { id: "notes", label: "Notes", icon: FileText },
 ];
 
 function Dashboard() {
@@ -142,6 +143,7 @@ function Dashboard() {
           {tab === "clubs" && <ClubsView />}
           {tab === "notices" && <NoticesView />}
           {tab === "opportunities" && <OppView />}
+          {tab === "notes" && <NotesView />}
         </main>
       </div>
     </div>
@@ -332,5 +334,274 @@ function OppView() {
         ))}
       </div>
     </>
+  );
+}
+
+type Note = {
+  id: string;
+  title: string;
+  description: string;
+  fileUrl: string;
+  fileName: string;
+  type: "free" | "paid";
+  price?: number;
+};
+
+const seedNotes: Note[] = [
+  {
+    id: "n1",
+    title: "Data Structures — Quick Revision",
+    description: "Concise notes covering arrays, linked lists, trees, and graphs.",
+    fileUrl: "https://www.africau.edu/images/default/sample.pdf",
+    fileName: "ds-revision.pdf",
+    type: "free",
+  },
+  {
+    id: "n2",
+    title: "Operating Systems — Full Notes",
+    description: "Comprehensive OS notes: processes, scheduling, memory, file systems.",
+    fileUrl: "https://www.africau.edu/images/default/sample.pdf",
+    fileName: "os-full.pdf",
+    type: "paid",
+    price: 99,
+  },
+  {
+    id: "n3",
+    title: "DBMS Cheat Sheet",
+    description: "One-page summary of normalization, SQL, and transactions.",
+    fileUrl: "https://www.africau.edu/images/default/sample.pdf",
+    fileName: "dbms-cheatsheet.pdf",
+    type: "free",
+  },
+  {
+    id: "n4",
+    title: "Machine Learning — Premium Pack",
+    description: "Curated ML notes with worked examples and practice problems.",
+    fileUrl: "https://www.africau.edu/images/default/sample.pdf",
+    fileName: "ml-premium.pdf",
+    type: "paid",
+    price: 149,
+  },
+];
+
+function NotesView() {
+  const [notes, setNotes] = useState<Note[]>(seedNotes);
+  const [unlocked, setUnlocked] = useState<Set<string>>(new Set());
+  const [filter, setFilter] = useState<"all" | "free" | "paid">("all");
+  const [selected, setSelected] = useState<Note | null>(null);
+  const [showUpload, setShowUpload] = useState(false);
+
+  const filtered = notes.filter((n) => filter === "all" || n.type === filter);
+
+  const openNote = (n: Note) => {
+    if (n.type === "free" || unlocked.has(n.id)) {
+      window.open(n.fileUrl, "_blank");
+    } else {
+      setSelected(n);
+    }
+  };
+
+  const handleUnlock = () => {
+    if (!selected) return;
+    // Simulate payment success
+    setUnlocked((prev) => new Set(prev).add(selected.id));
+    const justUnlocked = selected;
+    setSelected(null);
+    setTimeout(() => window.open(justUnlocked.fileUrl, "_blank"), 200);
+  };
+
+  return (
+    <>
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl font-bold">Notes</h1>
+          <p className="mt-1 text-muted-foreground">Free and premium study notes shared by your peers.</p>
+        </div>
+        <Button onClick={() => setShowUpload(true)} className="shadow-elegant">
+          <Upload className="mr-2 h-4 w-4" /> Upload Notes
+        </Button>
+      </div>
+
+      <div className="mb-6 flex gap-2">
+        {(["all", "free", "paid"] as const).map((f) => (
+          <Button
+            key={f}
+            size="sm"
+            variant={filter === f ? "default" : "outline"}
+            onClick={() => setFilter(f)}
+            className="capitalize"
+          >
+            {f}
+          </Button>
+        ))}
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {filtered.map((n) => {
+          const isUnlocked = n.type === "free" || unlocked.has(n.id);
+          return (
+            <div
+              key={n.id}
+              className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elegant"
+            >
+              <div className="flex items-start justify-between gap-2">
+                {n.type === "free" ? (
+                  <Badge className="bg-emerald-500 text-white hover:bg-emerald-500/90">Free</Badge>
+                ) : (
+                  <Badge className="bg-red-500 text-white hover:bg-red-500/90">Paid · ₹{n.price}</Badge>
+                )}
+                {n.type === "paid" && !isUnlocked && (
+                  <Lock className="h-4 w-4 text-muted-foreground" />
+                )}
+              </div>
+              <h3 className="mt-3 font-display text-lg font-semibold">{n.title}</h3>
+              <p className="mt-1 flex-1 text-sm text-muted-foreground">{n.description}</p>
+              <Button
+                size="sm"
+                className="mt-4 w-full"
+                variant={isUnlocked ? "default" : "secondary"}
+                onClick={() => openNote(n)}
+              >
+                {isUnlocked ? (
+                  <><Download className="mr-2 h-4 w-4" /> Open / Download</>
+                ) : (
+                  <><Lock className="mr-2 h-4 w-4" /> Locked</>
+                )}
+              </Button>
+            </div>
+          );
+        })}
+        {filtered.length === 0 && (
+          <div className="col-span-full rounded-2xl border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
+            No notes found for this filter.
+          </div>
+        )}
+      </div>
+
+      {selected && (
+        <UnlockModal note={selected} onClose={() => setSelected(null)} onUnlock={handleUnlock} />
+      )}
+      {showUpload && (
+        <UploadModal
+          onClose={() => setShowUpload(false)}
+          onCreate={(n) => {
+            setNotes((prev) => [n, ...prev]);
+            setShowUpload(false);
+          }}
+        />
+      )}
+    </>
+  );
+}
+
+function UnlockModal({ note, onClose, onUnlock }: { note: Note; onClose: () => void; onUnlock: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
+      <div
+        className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-elegant"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-4 flex items-start justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Lock className="h-5 w-5 text-primary" />
+            <h3 className="font-display text-xl font-semibold">Unlock note</h3>
+          </div>
+          <Button variant="ghost" size="icon" onClick={onClose}><X className="h-4 w-4" /></Button>
+        </div>
+        <h4 className="text-base font-semibold">{note.title}</h4>
+        <p className="mt-1 text-sm text-muted-foreground">{note.description}</p>
+        <div className="my-4 flex items-center justify-between rounded-lg border border-border bg-background p-3">
+          <span className="text-sm text-muted-foreground">Price</span>
+          <span className="font-display text-lg font-bold">₹{note.price}</span>
+        </div>
+        <Button className="w-full shadow-elegant" onClick={onUnlock}>Unlock / Buy</Button>
+        <p className="mt-2 text-center text-xs text-muted-foreground">Payment is simulated for demo purposes.</p>
+      </div>
+    </div>
+  );
+}
+
+function UploadModal({ onClose, onCreate }: { onClose: () => void; onCreate: (n: Note) => void }) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [type, setType] = useState<"free" | "paid">("free");
+  const [price, setPrice] = useState("49");
+  const [file, setFile] = useState<File | null>(null);
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim() || !file) return;
+    const fileUrl = URL.createObjectURL(file);
+    onCreate({
+      id: `n${Date.now()}`,
+      title: title.trim(),
+      description: description.trim(),
+      fileUrl,
+      fileName: file.name,
+      type,
+      price: type === "paid" ? Number(price) || 0 : undefined,
+    });
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
+      <form
+        onSubmit={submit}
+        className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-elegant"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="font-display text-xl font-semibold">Upload note</h3>
+          <Button type="button" variant="ghost" size="icon" onClick={onClose}><X className="h-4 w-4" /></Button>
+        </div>
+        <div className="space-y-3">
+          <div>
+            <label className="mb-1 block text-xs font-medium">Title</label>
+            <Input value={title} onChange={(e) => setTitle(e.target.value)} required />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium">Description</label>
+            <Input value={description} onChange={(e) => setDescription(e.target.value)} />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium">File (PDF / Image)</label>
+            <Input
+              type="file"
+              accept="application/pdf,image/*"
+              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+              required
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium">Type</label>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                size="sm"
+                variant={type === "free" ? "default" : "outline"}
+                onClick={() => setType("free")}
+              >
+                Free
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant={type === "paid" ? "default" : "outline"}
+                onClick={() => setType("paid")}
+              >
+                Paid
+              </Button>
+            </div>
+          </div>
+          {type === "paid" && (
+            <div>
+              <label className="mb-1 block text-xs font-medium">Price (₹)</label>
+              <Input type="number" min="1" value={price} onChange={(e) => setPrice(e.target.value)} required />
+            </div>
+          )}
+        </div>
+        <Button type="submit" className="mt-5 w-full shadow-elegant">Upload</Button>
+      </form>
+    </div>
   );
 }
