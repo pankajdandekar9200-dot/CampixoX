@@ -89,6 +89,7 @@ function Landing() {
       <section className="relative overflow-hidden">
         <video
           className="absolute inset-0 h-full w-full object-cover"
+          style={{ filter: "brightness(1.15) contrast(1.1) saturate(1.25)" }}
           src="/videos/hero-bg.mp4"
           autoPlay
           loop
@@ -97,9 +98,9 @@ function Landing() {
           preload="auto"
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/20 to-background/80" />
-        <div className="pointer-events-none absolute -top-32 left-1/2 h-[500px] w-[900px] -translate-x-1/2 rounded-full bg-gradient-hero opacity-30 blur-3xl" />
+        <div className="absolute inset-0 bg-background/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-transparent to-background/50" />
+        <div className="pointer-events-none absolute -top-32 left-1/2 h-[500px] w-[900px] -translate-x-1/2 rounded-full bg-gradient-hero opacity-20 blur-3xl" />
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-2 lg:gap-8 lg:py-28">
           <div className="text-center lg:text-left">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-4 py-1.5 text-xs font-medium text-muted-foreground shadow-card backdrop-blur">
