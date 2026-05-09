@@ -34,5 +34,5 @@ export const notices = [
 export const opportunities = [
   { id: 1, title: "PRANJAL PVT. LMT", company: "PRANJAL PVT. LMT", location: "India", type: "Job", deadline: "Open" },
   { id: 2, title: "Gen AI Engineering Opportunity", company: "GOOGLE", location: "Online / Global", type: "Internship / Job", deadline: "Open" },
-  { id: 3, title: "Security Opportunity", company: "Dr. D. Y. Patil Institute of Technology", location: "Pune", type: "Internship", deadline: "Open" },
+  { id: 3, title: "Security Guard Opportunity", company: "Dr. D. Y. Patil Institute of Technology", location: "Pune", type: "Internship", deadline: "Open" },
 ];
