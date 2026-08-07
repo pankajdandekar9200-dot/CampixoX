@@ -32,7 +32,7 @@ export const notices = [
 ];
 
 export const opportunities = [
-  { id: 1, title: "CRAME OPERATOR RECRUITMENT", company: "SHRAVAN.PVT.LMT", location: "NASHIK", type: "CEO", deadline: "Open" },
+  { id: 1, title: "CRANE OPERATOR RECRUITMENT", company: "SHRAVAN.PVT.LMT", location: "NASHIK", type: "CEO", deadline: "Open" },
   { id: 2, title: "Gen AI Engineering Opportunity", company: "GOOGLE-PANKAJ COLLABE", location: "Online / Global", type: "Internship / Job", deadline: "Open" },
   { id: 3, title: "Security Guard Opportunity", company: "Dr. D. Y. Patil Institute of Technology", location: "Pune", type: "Internship", deadline: "Open" },
 ];
