@@ -1,3 +1,5 @@
+import shravanLogo from "@/assets/shravan-logo.jpg.asset.json";
+
 export type EventItem = {
   id: string;
   title: string;
@@ -50,6 +52,7 @@ export const opportunities: Opportunity[] = [
     location: "India",
     type: "Job",
     deadline: "Open",
+    logo: shravanLogo.url,
   },
   {
     id: "google-genai",
