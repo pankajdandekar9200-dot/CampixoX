@@ -29,6 +29,7 @@ export type Opportunity = {
   location: string;
   type: string;
   deadline: string;
+  logo?: string;
 };
 
 export const events: EventItem[] = [];
