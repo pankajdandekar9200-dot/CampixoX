@@ -323,7 +323,12 @@ function OppView() {
       <div className="grid gap-4 md:grid-cols-2">
         {opportunities.map((o) => (
           <div key={o.id} className="rounded-2xl border border-border bg-card p-6 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elegant">
-            <Badge variant="secondary">{o.type}</Badge>
+            <div className="flex items-center gap-3">
+              {o.logo && (
+                <img src={o.logo} alt={`${o.company} logo`} className="h-12 w-12 rounded-lg object-cover" />
+              )}
+              <Badge variant="secondary">{o.type}</Badge>
+            </div>
             <h3 className="mt-3 font-display text-lg font-semibold">{o.title}</h3>
             <p className="mt-1 text-sm text-muted-foreground">{o.company} · {o.location}</p>
             <div className="mt-4 flex items-center justify-between">
